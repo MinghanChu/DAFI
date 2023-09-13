@@ -54,17 +54,22 @@ class Model(PhysicsModel):
         self.nsamples = inputs_dafi['nsamples']
         max_iterations = inputs_dafi['max_iterations']
         self.analysis_to_obs = inputs_dafi['analysis_to_obs']
-
+        print('self.nsamples',self.nsamples)
         # read input file
         self.foam_case = inputs_model['foam_case']
+        print('foam_case', self.foam_case)
         iteration_nstep = inputs_model['iteration_nstep']
+        print('interation_nstep', iteration_nstep)
         klmodes_file = inputs_model['klmodes_file']
+        print('klmodes_file', klmodes_file)
         nut_base_foamfile = inputs_model['nut_baseline_foamfile']
+        print('nut_base_foamfile', nut_base_foamfile)
         nklmodes = inputs_model.get('nklmodes', None)
         self.ncpu = inputs_model.get('ncpu', 1)
         obs_file = inputs_model['obs_file']
         self.foam_rc = inputs_model.get('foam_rc', None)
 
+        print('self.foam_rc', self.foam_rc)
         # required attributes
         self.name = 'nutFoam Eddy viscosity RANS model'
 
