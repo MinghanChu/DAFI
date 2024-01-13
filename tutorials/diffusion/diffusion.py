@@ -33,6 +33,7 @@ class Model(PhysicsModel):
 
         # read input file
         input_file = inputs_model['input_file']
+        print('input_file: ', input_file)
         with open(input_file, 'r') as f:
             inputs_model = yaml.load(f, yaml.SafeLoader)
         mu_init = inputs_model['prior_mean']

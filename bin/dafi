@@ -125,12 +125,16 @@ def _timed_run(function):
 
 if __name__ == "__main__":
     # parse input file
+    
     args = _parse_args()
     (inputs_dafi, inputs_inverse, inputs_model) = _read_input(args.input_file)
     # write DAFI version
     _ = _get_code_version()
     # run and time DAFI
     dafi.run = _timed_run(dafi.run)
+    
     _ = dafi.run(**inputs_dafi,
                  inputs_inverse=inputs_inverse,
                  inputs_model=inputs_model)
+    
+    print('Minghan chu is then here!')

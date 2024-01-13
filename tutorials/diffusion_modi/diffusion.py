@@ -1,6 +1,12 @@
 # Copyright 2020 Virginia Polytechnic Institute and State University.
 """ Physics model for the one dimension diffusion equation."""
 
+from importlib import reload
+from dafi import main
+
+main = reload(main)
+
+
 # standard library imports
 import os
 
@@ -33,8 +39,12 @@ class Model(PhysicsModel):
 
         # read input file
         input_file = inputs_model['input_file']
+        # Added by minghan Sep 14 2023
+        print('input_file: ', input_file)
+
         with open(input_file, 'r') as f:
             inputs_model = yaml.load(f, yaml.SafeLoader)
+            print('inputs_model: ',inputs_model)
         mu_init = inputs_model['prior_mean']
         stddev = inputs_model['stddev']
         length_scale = inputs_model['length_scale']
@@ -43,6 +53,7 @@ class Model(PhysicsModel):
         obs_abs_std = inputs_model['obs_abs_stddev']
         self.nmodes = inputs_model['nmodes']
         calculate_kl_flag = inputs_model.get('calculate_kl_flag', True)
+        print('mu_init: ', mu_init)
 
         # create save directory
         self.savedir = './results_diffusion'
@@ -81,6 +92,7 @@ class Model(PhysicsModel):
             kl_modes = np.loadtxt('KLmodes.dat')
         kl_modes = kl_modes[:-1, :]  # Q
 
+        print('kl_modes: ', kl_modes)
         # create random field
         self.rf = rf.LogNormal(kl_modes, mu_init, self.space_interval)
 
@@ -126,6 +138,7 @@ class Model(PhysicsModel):
         # solve model in observation space for each sample
         for isample in range(self.nsamples):
             mu = np.squeeze(self.rf.reconstruct_func(state_vec[:, isample]))
+            #print('state_vec: ', state_vec[:,1]) #15 states
             mu_dot = np.gradient(mu, self.space_interval)
             u_vec = self._solve_diffusion_equation(mu, mu_dot)
             model_obs[:, isample] = np.interp(
@@ -151,7 +164,7 @@ class Model(PhysicsModel):
         omega = np.zeros((self.nmodes))
         omega[0:3] = np.array([1, 1, 1])
         np.savetxt(os.path.join(self.savedir, 'omega_truth.dat'), omega)
-        mu = np.squeeze(self.rf.reconstruct_func(omega))
+        mu = np.squeeze(self.rf.reconstruct_func(omega)) #KL expansion to represent continous fields
         mu_dot = np.gradient(mu, self.space_interval)
         np.savetxt(os.path.join(self.savedir, 'mu_truth.dat'), mu)
 

@@ -25,6 +25,7 @@ def run(model_file, inverse_method, nsamples, ntime=None,
         convergence_residual=None, convergence_factor=1.0, save_level=None,
         save_dir='results_dafi', rand_seed=None, verbosity=0,
         inputs_inverse={}, inputs_model={}):
+    
     """ Run DAFI.
 
     Accesible through ``dafi.run()``.
@@ -97,6 +98,7 @@ def run(model_file, inverse_method, nsamples, ntime=None,
     """
     # collect inputs
     # the inverse method and physics model are allowed to modify these
+    
     inputs_dafi = {
         'model_file': model_file,
         'inverse_method': inverse_method,
@@ -115,6 +117,7 @@ def run(model_file, inverse_method, nsamples, ntime=None,
         'verbosity': verbosity,
     }
 
+    
     # configure logger
     if verbosity == 'debug':
         logging.basicConfig(format='%(message)s', level=logging.DEBUG)
@@ -174,7 +177,7 @@ def _solve(inputs_dafi, inverse, model):
     # time and iteration arrays
     time_array = np.arange(inputs_dafi['ntime'], dtype=int)
     iteration_array = np.arange(inputs_dafi['max_iterations'], dtype=int)
-
+    
     # initial ensemble
     state_forecast = model.generate_ensemble()
 
@@ -207,7 +210,7 @@ def _solve(inputs_dafi, inverse, model):
         early_stop = False
         for iteration in iteration_array:
             # log
-            log_message = f"\n  Iteration: {iteration}"
+            log_message = f"\n Number of  Iteration: {iteration}"
             logger.log(_log_level(2), log_message)
 
             ts = tm.time()
@@ -216,6 +219,7 @@ def _solve(inputs_dafi, inverse, model):
                 state_forecast = state_analysis.copy()
             state_in_obsspace = model.state_to_observation(state_forecast)
             print(f'      Ensemble of forecast ... {tm.time()-ts:.2f}s')
+           
 
             if iteration == 0:
                 state_in_obsspace_prior = state_in_obsspace
@@ -394,7 +398,7 @@ def _convergence(misfit_list, obs_error, noise_factor, min_residual, option):
     log_message += f"\n      Norm of misfit: {misfit_list[-1]}"
     log_message += f"\n      Noise level: {noise_criteria}"
     log_message += f"\n    Convergence (residual): {conv_residual}"
-    log_message += f"\n      Relative iterative residual: {residual}"
+    log_message += f"\n      minghan Relative iterative residual: {residual}"
     log_message += f"\n       Relative convergence criterion: {min_residual}"
     return conv, log_message, (residual, noise_criteria)
 

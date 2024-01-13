@@ -73,6 +73,7 @@ for case, step, fname in [prior, posterior]:
     u_mat = np.loadtxt(f'./results_diffusion/U.{step+1}')
     u_mean = np.mean(u_mat, 1)
     omega_file = os.path.join(dafi_results_dir, fname, f'{fname}_0')
+    print('omega_file: ', omega_file)
     omega_mat = np.loadtxt(omega_file)
     mu_mat = reconstruct_inferred_mu(omega_mat, klmodes)
     mu_mean = np.sum(mu_mat, 1) / mu_mat.shape[1]
